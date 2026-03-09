@@ -10,7 +10,7 @@ body {
 	background:
 		radial-gradient(circle at 10% 15%, #ffffff 0, transparent 32%),
 		radial-gradient(circle at 85% 20%, #ffffff 0, transparent 28%),
-		linear-gradient(140deg, #ffffff 0%, #ffffff 40%, #0b1024 100%);
+		linear-gradient(140deg, rgb(0, 88, 69) 0%, #113329 40%, #0b2410 100%);
 	background-size: 150% 150%, 150% 150%, 180% 180%;
 	animation: auroraFlow 22s ease-in-out infinite;
 	display: grid;
@@ -45,7 +45,7 @@ body::after {
 	height: 360px;
 	right: -110px;
 	bottom: 6%;
-	background: radial-gradient(circle, rgba(255, 255, 255, 0.42) 0%, rgba(111, 235, 255, 0) 70%);
+	background: radial-gradient(circle, rgba(141, 136, 59, 0.42) 0%, rgba(111, 235, 255, 0) 70%);
 	animation: driftTwo 18s ease-in-out infinite;
 }
 
@@ -75,7 +75,7 @@ h1 {
 	font-size: clamp(1.8rem, 4vw, 2.8rem);
 	line-height: 1.1;
 	letter-spacing: -0.02em;
-	background: linear-gradient(180deg, #ffffff 0%, #cfd7ff 100%);
+	background: linear-gradient(180deg, #ff0000 0%, #cfd7ff 100%);
 	-webkit-background-clip: text;
 	background-clip: text;
 	color: transparent;
