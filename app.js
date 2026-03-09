@@ -15,6 +15,11 @@ const CHIP_LABELS = ['NO', 'NOP', 'NEGADO'];
 let rainTimeoutId = null;
 let lastDropX = null;
 
+/* nuevo sistema de insistencia del usuario */
+let clickStreak = 0;
+let lastClickTime = 0;
+let rageModeTimeout = null;
+
 const normalizePhrase = (value) => {
     const text = String(value || '').trim();
     if (!text) {
@@ -37,8 +42,8 @@ const setLoading = (isLoading) => {
     nextPhraseBtn.textContent = isLoading ? 'Buscando excusa...' : defaultButtonLabel;
 
     statusEl.textContent = isLoading
-    ? 'Fabricando una excusa premium…'
-    : 'Excusa lista para usar';
+        ? 'Fabricando una excusa premium…'
+        : 'Excusa lista para usar';
 };
 
 const setMetaTime = () => {
@@ -50,6 +55,7 @@ const setMetaTime = () => {
 
 const fetchNoAsAService = async () => {
     const response = await fetch(`${NAAS_ENDPOINT}?t=${Date.now()}`, { cache: 'no-store' });
+
     if (!response.ok) {
         throw new Error('No as a Service no disponible');
     }
@@ -92,6 +98,7 @@ const spawnNoChip = () => {
     chipEl.textContent = CHIP_LABELS[Math.floor(Math.random() * CHIP_LABELS.length)];
 
     let xPercent = randomInRange(1, 96);
+
     if (lastDropX !== null && Math.abs(xPercent - lastDropX) < 12) {
         xPercent = (xPercent + randomInRange(14, 28)) % 97;
     }
@@ -106,6 +113,7 @@ const spawnNoChip = () => {
     rainLayerEl.appendChild(chipEl);
 
     const lifeTimeMs = Number.parseFloat(chipEl.style.getPropertyValue('--chip-duration')) * 1000;
+
     window.setTimeout(() => {
         chipEl.remove();
     }, lifeTimeMs + 250);
@@ -130,7 +138,9 @@ const renderPhrase = ({ phrase, source }) => {
     setMetaTime();
 
     const stampLabels = ['DENEGADO', 'NOPE', 'RECHAZADO'];
+
     rejectStampEl.textContent = stampLabels[Math.floor(Math.random() * stampLabels.length)];
+
     cardEl.classList.remove('is-stamped');
     void cardEl.offsetWidth;
     cardEl.classList.add('is-stamped');
@@ -158,6 +168,48 @@ const loadPhrase = async () => {
     }
 };
 
-nextPhraseBtn.addEventListener('click', loadPhrase);
+/* nuevo comportamiento: modo irritado si el usuario insiste demasiado */
+
+const triggerRageMode = () => {
+    statusEl.textContent = 'Estás insistiendo demasiado… el sistema perdió la paciencia.';
+    phraseEl.textContent = 'NO. Y ahora deja de preguntar.';
+    sourceEl.textContent = 'Sistema irritado';
+    setMetaTime();
+
+    cardEl.classList.add('rage-mode');
+
+    nextPhraseBtn.disabled = true;
+    nextPhraseBtn.textContent = 'Demasiado tarde';
+
+    clearTimeout(rageModeTimeout);
+
+    rageModeTimeout = setTimeout(() => {
+        cardEl.classList.remove('rage-mode');
+        nextPhraseBtn.disabled = false;
+        nextPhraseBtn.textContent = defaultButtonLabel;
+        clickStreak = 0;
+        statusEl.textContent = 'La negatividad volvió a niveles normales.';
+    }, 4000);
+};
+
+nextPhraseBtn.addEventListener('click', () => {
+    const now = Date.now();
+
+    if (now - lastClickTime < 1200) {
+        clickStreak++;
+    } else {
+        clickStreak = 1;
+    }
+
+    lastClickTime = now;
+
+    if (clickStreak >= 5) {
+        triggerRageMode();
+        return;
+    }
+
+    loadPhrase();
+});
+
 startNoRain();
 loadPhrase();
