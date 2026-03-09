@@ -67,7 +67,7 @@ body::after {
 	text-transform: uppercase;
 	letter-spacing: 0.18em;
 	font-size: 0.75rem;
-	color: #a7b0ff;
+	color: #ffffff;
 }
 
 h1 {
@@ -92,8 +92,8 @@ h1 {
 		linear-gradient(140deg, rgba(24, 31, 71, 0.62) 0%, rgba(11, 15, 35, 0.65) 100%) padding-box,
 		linear-gradient(
 			115deg,
-			rgba(126, 145, 255, 0.9) 0%,
-			rgba(136, 170, 255, 0.9) 16%,
+			rgba(255, 255, 255, 0.9) 0%,
+			rgba(255, 255, 255, 0.9) 16%,
 			rgba(122, 214, 255, 0.9) 34%,
 			rgba(139, 227, 255, 0.9) 50%,
 			rgba(171, 201, 255, 0.9) 66%,
